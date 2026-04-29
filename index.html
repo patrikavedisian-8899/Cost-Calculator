@@ -1,0 +1,187 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Monthly Spending</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <main class="app-shell">
+      <section class="topbar">
+        <div>
+          <p class="eyebrow" id="storageStatus">Local browser storage</p>
+          <h1>Monthly Spending</h1>
+        </div>
+        <div class="month-controls">
+          <button id="signOut" class="secondary-button" type="button" hidden>Sign out</button>
+          <button class="icon-button" id="previousMonth" aria-label="Previous month" title="Previous month">‹</button>
+          <label class="month-picker">
+            <span>Month</span>
+            <input type="month" id="selectedMonth" />
+          </label>
+          <button class="icon-button" id="nextMonth" aria-label="Next month" title="Next month">›</button>
+        </div>
+      </section>
+
+      <section class="auth-panel panel" id="authPanel" hidden>
+        <div>
+          <p class="eyebrow">Private cloud storage</p>
+          <h2>Sign in to your spending app</h2>
+        </div>
+        <form id="authForm" class="auth-form">
+          <label>
+            <span>Email</span>
+            <input type="email" id="authEmail" autocomplete="email" placeholder="you@example.com" required />
+          </label>
+          <button class="primary-button" type="submit">Send sign-in link</button>
+        </form>
+        <p id="authMessage" class="auth-message"></p>
+      </section>
+
+      <div id="appContent">
+      <section class="summary-grid" aria-label="Monthly summary">
+        <article class="metric">
+          <span>Total spent</span>
+          <strong id="totalSpent">$0</strong>
+          <small id="transactionCount">0 transactions</small>
+        </article>
+        <article class="metric">
+          <span>Budget status</span>
+          <strong id="budgetStatus">$0 left</strong>
+          <small id="budgetLabel">Budget $2,500</small>
+        </article>
+        <article class="metric">
+          <span>Daily average</span>
+          <strong id="dailyAverage">$0</strong>
+          <small id="projectedSpend">Projected $0</small>
+        </article>
+        <article class="metric">
+          <span>Top category</span>
+          <strong id="topCategory">None</strong>
+          <small id="topCategoryShare">No spending yet</small>
+        </article>
+      </section>
+
+      <section class="main-layout">
+        <aside class="panel entry-panel" aria-label="Add spending">
+          <div class="panel-heading">
+            <h2>Add spending</h2>
+            <button id="seedDemo" class="ghost-button" type="button">Demo data</button>
+          </div>
+
+          <form id="expenseForm">
+            <label>
+              <span>Date</span>
+              <input type="date" id="expenseDate" required />
+            </label>
+
+            <label>
+              <span>Amount</span>
+              <input type="number" id="expenseAmount" min="0.01" step="0.01" placeholder="42.50" required />
+            </label>
+
+            <label>
+              <span>Category</span>
+              <select id="expenseCategory" required>
+                <option>Groceries</option>
+                <option>Dining</option>
+                <option>Transport</option>
+                <option>Home</option>
+                <option>Health</option>
+                <option>Shopping</option>
+                <option>Subscriptions</option>
+                <option>Travel</option>
+                <option>Other</option>
+              </select>
+            </label>
+
+            <label>
+              <span>Note</span>
+              <input type="text" id="expenseNote" maxlength="80" placeholder="Coffee, taxi, rent..." />
+            </label>
+
+            <button class="primary-button" type="submit">Add expense</button>
+          </form>
+
+          <div class="settings-block">
+            <label>
+              <span>Monthly budget</span>
+              <input type="number" id="monthlyBudget" min="0" step="50" />
+            </label>
+            <div class="file-actions">
+              <button id="exportData" class="secondary-button" type="button">Export</button>
+              <label class="secondary-button import-button">
+                Import
+                <input type="file" id="importData" accept="application/json" />
+              </label>
+            </div>
+          </div>
+        </aside>
+
+        <section class="reports">
+          <div class="tabs" role="tablist" aria-label="Report views">
+            <button class="tab active" data-view="overview" type="button">Overview</button>
+            <button class="tab" data-view="categories" type="button">Categories</button>
+            <button class="tab" data-view="transactions" type="button">Transactions</button>
+          </div>
+
+          <div class="report-view active" id="overviewView">
+            <section class="panel insight-panel">
+              <div class="panel-heading">
+                <h2>Insights</h2>
+                <span id="insightMonth"></span>
+              </div>
+              <ul id="insights" class="insights-list"></ul>
+            </section>
+
+            <section class="panel chart-panel">
+              <div class="panel-heading">
+                <h2>Daily rhythm</h2>
+                <span id="dailyPeak"></span>
+              </div>
+              <div id="dailyChart" class="daily-chart" aria-label="Daily spending chart"></div>
+            </section>
+          </div>
+
+          <div class="report-view" id="categoriesView">
+            <section class="panel">
+              <div class="panel-heading">
+                <h2>Category breakdown</h2>
+                <span id="categoryTotal"></span>
+              </div>
+              <div id="categoryList" class="category-list"></div>
+            </section>
+          </div>
+
+          <div class="report-view" id="transactionsView">
+            <section class="panel">
+              <div class="panel-heading">
+                <h2>Transactions</h2>
+                <button id="clearMonth" class="danger-button" type="button">Clear month</button>
+              </div>
+              <div id="transactionList" class="transaction-list"></div>
+            </section>
+          </div>
+        </section>
+      </section>
+      </div>
+    </main>
+
+    <template id="transactionTemplate">
+      <article class="transaction">
+        <div>
+          <strong data-field="note"></strong>
+          <span data-field="meta"></span>
+        </div>
+        <div class="transaction-amount">
+          <strong data-field="amount"></strong>
+          <button type="button" data-action="delete" aria-label="Delete transaction" title="Delete transaction">×</button>
+        </div>
+      </article>
+    </template>
+
+    <script src="app-config.js"></script>
+    <script type="module" src="app.js"></script>
+  </body>
+</html>
