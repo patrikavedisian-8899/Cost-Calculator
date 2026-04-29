@@ -28,7 +28,9 @@ const state = {
 const els = {
   authPanel: document.querySelector("#authPanel"),
   authForm: document.querySelector("#authForm"),
+  codeForm: document.querySelector("#codeForm"),
   authEmail: document.querySelector("#authEmail"),
+  authCode: document.querySelector("#authCode"),
   authMessage: document.querySelector("#authMessage"),
   signOut: document.querySelector("#signOut"),
   appContent: document.querySelector("#appContent"),
@@ -581,14 +583,34 @@ function bindEvents() {
 
     setBusy(true);
     try {
-      const { error } = await state.cloud.auth.signInWithOtp({
+      const { error } = await state.cloud.auth.signInWithOtp({ email });
+      if (error) throw error;
+      els.codeForm.hidden = false;
+      els.authCode.focus();
+      showMessage("Check your email for the 6-digit login code.", "success");
+    } catch (error) {
+      showMessage(`Sign-in failed: ${error.message || "Check your Supabase settings."}`, "error");
+    } finally {
+      setBusy(false);
+    }
+  });
+
+  els.codeForm.addEventListener("submit", async (event) => {
+    event.preventDefault();
+    const email = els.authEmail.value.trim().toLowerCase();
+    const token = els.authCode.value.trim();
+
+    setBusy(true);
+    try {
+      const { error } = await state.cloud.auth.verifyOtp({
         email,
-        options: { emailRedirectTo: window.location.origin },
+        token,
+        type: "email",
       });
       if (error) throw error;
-      showMessage("Check your email for the sign-in link.", "success");
-    } catch {
-      showMessage("Sign-in email could not be sent. Check your Supabase settings.", "error");
+      showMessage("Signed in.", "success");
+    } catch (error) {
+      showMessage(`Code failed: ${error.message || "Try requesting a new code."}`, "error");
     } finally {
       setBusy(false);
     }
