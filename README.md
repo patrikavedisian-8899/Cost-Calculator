@@ -53,3 +53,23 @@ For the most private one-person setup, create/sign in with your own user, then d
 ## Notes
 
 Deleting a transaction or clearing a month asks for confirmation first. Exporting backups is still a good habit while testing.
+
+## Live App
+
+Production URL:
+
+https://project-cxv17.vercel.app
+
+## Supabase Auth URLs
+
+Use these in Supabase Authentication → URL Configuration.
+
+Site URL:
+
+https://project-cxv17.vercel.app
+
+Redirect URLs:
+
+https://project-cxv17.vercel.app
+https://project-cxv17.vercel.app/**
+
