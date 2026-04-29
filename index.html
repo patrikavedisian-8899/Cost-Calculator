@@ -34,7 +34,14 @@
             <span>Email</span>
             <input type="email" id="authEmail" autocomplete="email" placeholder="you@example.com" required />
           </label>
-          <button class="primary-button" type="submit">Send sign-in link</button>
+          <button class="primary-button" type="submit">Send code</button>
+        </form>
+        <form id="codeForm" class="auth-form" hidden>
+          <label>
+            <span>Login code</span>
+            <input type="text" id="authCode" inputmode="numeric" autocomplete="one-time-code" placeholder="123456" required />
+          </label>
+          <button class="primary-button" type="submit">Sign in</button>
         </form>
         <p id="authMessage" class="auth-message"></p>
       </section>
@@ -91,97 +98,3 @@
                 <option>Health</option>
                 <option>Shopping</option>
                 <option>Subscriptions</option>
-                <option>Travel</option>
-                <option>Other</option>
-              </select>
-            </label>
-
-            <label>
-              <span>Note</span>
-              <input type="text" id="expenseNote" maxlength="80" placeholder="Coffee, taxi, rent..." />
-            </label>
-
-            <button class="primary-button" type="submit">Add expense</button>
-          </form>
-
-          <div class="settings-block">
-            <label>
-              <span>Monthly budget</span>
-              <input type="number" id="monthlyBudget" min="0" step="50" />
-            </label>
-            <div class="file-actions">
-              <button id="exportData" class="secondary-button" type="button">Export</button>
-              <label class="secondary-button import-button">
-                Import
-                <input type="file" id="importData" accept="application/json" />
-              </label>
-            </div>
-          </div>
-        </aside>
-
-        <section class="reports">
-          <div class="tabs" role="tablist" aria-label="Report views">
-            <button class="tab active" data-view="overview" type="button">Overview</button>
-            <button class="tab" data-view="categories" type="button">Categories</button>
-            <button class="tab" data-view="transactions" type="button">Transactions</button>
-          </div>
-
-          <div class="report-view active" id="overviewView">
-            <section class="panel insight-panel">
-              <div class="panel-heading">
-                <h2>Insights</h2>
-                <span id="insightMonth"></span>
-              </div>
-              <ul id="insights" class="insights-list"></ul>
-            </section>
-
-            <section class="panel chart-panel">
-              <div class="panel-heading">
-                <h2>Daily rhythm</h2>
-                <span id="dailyPeak"></span>
-              </div>
-              <div id="dailyChart" class="daily-chart" aria-label="Daily spending chart"></div>
-            </section>
-          </div>
-
-          <div class="report-view" id="categoriesView">
-            <section class="panel">
-              <div class="panel-heading">
-                <h2>Category breakdown</h2>
-                <span id="categoryTotal"></span>
-              </div>
-              <div id="categoryList" class="category-list"></div>
-            </section>
-          </div>
-
-          <div class="report-view" id="transactionsView">
-            <section class="panel">
-              <div class="panel-heading">
-                <h2>Transactions</h2>
-                <button id="clearMonth" class="danger-button" type="button">Clear month</button>
-              </div>
-              <div id="transactionList" class="transaction-list"></div>
-            </section>
-          </div>
-        </section>
-      </section>
-      </div>
-    </main>
-
-    <template id="transactionTemplate">
-      <article class="transaction">
-        <div>
-          <strong data-field="note"></strong>
-          <span data-field="meta"></span>
-        </div>
-        <div class="transaction-amount">
-          <strong data-field="amount"></strong>
-          <button type="button" data-action="delete" aria-label="Delete transaction" title="Delete transaction">×</button>
-        </div>
-      </article>
-    </template>
-
-    <script src="app-config.js"></script>
-    <script type="module" src="app.js"></script>
-  </body>
-</html>
