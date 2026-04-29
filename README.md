@@ -48,6 +48,8 @@ For the most private one-person setup, create/sign in with your own user, then d
 - Save data locally or in Supabase cloud storage.
 - Export and import JSON data for backup or moving browsers.
 
+- Initial Vercel deploy
+
 ## Notes
 
 Deleting a transaction or clearing a month asks for confirmation first. Exporting backups is still a good habit while testing.
